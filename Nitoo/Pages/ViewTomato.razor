@@ -1,0 +1,65 @@
+﻿@page "/ViewTomato"
+
+@using Nitoo.Data
+@using Blazored.LocalStorage;
+
+@inject TomatoService tomato_service
+@inject Blazored.LocalStorage.ILocalStorageService local_tore
+@inject NavigationManager nav_manager
+
+<h1>番茄管理</h1>
+
+
+@if (tomatos == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>创建者</th>
+                <th>开始日期</th>
+                <th>结束日期</th>
+                <th>目标</th>
+                <th>查看</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var tomato in tomatos)
+            {
+                <tr>
+                    <td>@tomato.person</td>
+                    <td>@tomato.start_date.ToShortDateString()</td>
+                    <td>@tomato.end_date.ToShortDateString()</td>
+                    <td>@tomato.target</td>
+                    <td><button @onclick="()=>view_detail(tomato)">查看详情</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+    private Tomato[] tomatos;
+    private Tomato new_tomato;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await refresh_futures();
+    }
+    public async Task refresh_futures()
+    {
+        tomatos = tomato_service.GetTomatos();
+
+        new_tomato = new Tomato();
+        new_tomato.person = await local_tore.GetItemAsync<string>("persion");
+    }
+    public void view_detail(Tomato item)
+    {
+        nav_manager.NavigateTo($"ViewTomatoDetail/{item._id}");
+    }
+
+}

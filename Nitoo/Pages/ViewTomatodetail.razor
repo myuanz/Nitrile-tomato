@@ -1,0 +1,77 @@
+﻿@page "/ViewTomatoDetail"
+@page "/ViewTomatoDetail/{_id}"
+
+@using Nitoo.Data
+@using Blazored.LocalStorage;
+@using MongoDB.Driver;
+@using MongoDB.Bson;
+
+@inject TomatoService tomato_service
+@inject Blazored.LocalStorage.ILocalStorageService local_tore
+@inject NavigationManager Nav
+@inject IJSRuntime JSRuntime
+
+<h1>番茄添加编辑</h1>
+<div>
+    <label title="首次输入后下一次会自动保存和重新">
+        君の名は? :
+        <input @bind="tomato.person" />
+    </label>
+</div>
+<div>
+    <label title="开始时间">
+        开始时间:
+        <RadzenDatePicker @bind-Value="tomato.end_date"
+                          TValue="DateTime"
+                          ShowTime="true"
+                          DateFormat="MM/dd/yyyy HH:mm" />
+    </label>
+    <label title="预计结束时间">
+        预计结束时间:
+        <RadzenDatePicker @bind-Value="tomato.end_date"
+                          TValue="DateTime"
+                          ShowTime="true"
+                          DateFormat="MM/dd/yyyy HH:mm" />
+    </label>
+</div>
+<div>
+    <label title="">
+        目标:
+        <input @bind="tomato.target" />
+    </label>
+</div>
+@foreach (var comment in tomato.comments)
+{
+    <p>@comment</p>
+}
+<button @onclick="add_new_tomato">新增/编辑</button>
+
+@code {
+    private Tomato tomato;
+    [Parameter]
+    public string _id { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        await refresh_futures(true);
+    }
+
+    public async Task refresh_futures(bool firstRender = false)
+    {
+
+        _id = _id ?? ObjectId.GenerateNewId().ToString();
+        tomato = tomato_service.FindTomato(ObjectId.Parse(_id)) ?? new Tomato();
+        tomato._id = ObjectId.Parse(_id);
+        tomato.comments = new List<Comment>();
+
+        tomato.person = tomato.person ?? await local_tore.GetItemAsync<string>("person");
+
+    }
+    public async Task add_new_tomato()
+    {
+        await tomato_service.AddTomato(tomato);
+        await local_tore.SetItemAsync("person", tomato.person);
+        Nav.NavigateTo("ViewTomato");
+    }
+
+
+}
