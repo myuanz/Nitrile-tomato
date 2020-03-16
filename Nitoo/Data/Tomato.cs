@@ -15,9 +15,9 @@ namespace Nitoo.Data
 {
     public enum TomatoState
     {
-        ´ıÍê³É,
-        ÒÑÍê³É,
-        ÒÑ·ÅÆú,
+        å¾…å®Œæˆ,
+        å·²å®Œæˆ,
+        å·²æ”¾å¼ƒ,
     };
     public class Comment{
         public DateTime datetime { get; set; }
