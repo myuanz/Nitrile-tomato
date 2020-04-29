@@ -1,0 +1,36 @@
+﻿@page "/UploadImage"
+@using System.IO
+
+<h1>上传图片</h1>
+<InputFile OnChange="HandleSelection" />
+<p>@status</p>
+@if (image.Length != 0)
+{
+    <img src="data:image;base64,@System.Convert.ToBase64String(image)"/>
+}
+
+@code {
+    string status;
+    byte[] image = {};
+
+    async Task HandleSelection(IFileListEntry[] files)
+    {
+        var file = files.FirstOrDefault();
+        if (file != null)
+        {
+            if (!Directory.Exists("upload"))
+            {
+                Directory.CreateDirectory("upload");
+            }
+            status = $"Finished loading {file.Size} bytes from {file.Name}";
+
+            await using (var fs = new FileStream($"upload/{file.Name}", FileMode.Create, FileAccess.Write))
+            {
+                await file.Data.CopyToAsync(fs);
+            }
+
+            file.Data.Close();
+        }
+    }
+
+}

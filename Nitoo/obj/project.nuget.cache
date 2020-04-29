@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "t/p0UY3lf2V7i09DMzPc5IsPrhhBDra74E9ocW468PjhNV9Y4qu9KuM0Xqx1jcZuisMHy2DbiGvImWftTs/kfQ==",
+  "dgSpecHash": "WQn4CKgHemQpn4J6FloAk2ife2ZLdvHrBaBMxJ5Vtz5sWYSvbH9e9SlvfKbOWWYZPPvNUB4HEUXuZZdEcBvG7A==",
   "success": true,
   "projectFilePath": "C:\\Users\\Administrator\\Desktop\\Nitrile-tomato\\Nitoo\\Nitoo.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Administrator\\.nuget\\packages\\blazored.localstorage\\2.1.1\\blazored.localstorage.2.1.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\blazorinputfile\\0.2.0\\blazorinputfile.0.2.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\dnsclient\\1.2.0\\dnsclient.1.2.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\gijgo\\1.9.13\\gijgo.1.9.13.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\jquery\\1.9.1\\jquery.1.9.1.nupkg.sha512",
