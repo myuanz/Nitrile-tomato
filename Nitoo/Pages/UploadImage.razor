@@ -23,12 +23,12 @@
                 Directory.CreateDirectory("upload");
             }
             status = $"Finished loading {file.Size} bytes from {file.Name}";
-            image_path = $"/upload/{file.Name}";
 
-            await using (var fs = new FileStream($"wwwroot{image_path}", FileMode.Create, FileAccess.Write))
+            await using (var fs = new FileStream($"wwwroot/upload/{file.Name}", FileMode.Create, FileAccess.Write))
             {
                 await file.Data.CopyToAsync(fs);
             }
+            image_path = $"/upload/{file.Name}";
 
             file.Data.Close();
         }
