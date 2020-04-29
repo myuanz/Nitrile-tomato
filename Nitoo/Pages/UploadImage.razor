@@ -4,27 +4,28 @@
 <h1>上传图片</h1>
 <InputFile OnChange="HandleSelection" />
 <p>@status</p>
-@if (image.Length != 0)
+@if (image_path.Length != 0)
 {
-    <img src="data:image;base64,@System.Convert.ToBase64String(image)"/>
+    <img src="@image_path" style="width: 100%;"/>
 }
 
 @code {
     string status;
-    byte[] image = {};
+    string image_path = "";
 
     async Task HandleSelection(IFileListEntry[] files)
     {
         var file = files.FirstOrDefault();
         if (file != null)
         {
-            if (!Directory.Exists("upload"))
+            if (!Directory.Exists("wwwroot/upload"))
             {
                 Directory.CreateDirectory("upload");
             }
             status = $"Finished loading {file.Size} bytes from {file.Name}";
+            image_path = $"/upload/{file.Name}";
 
-            await using (var fs = new FileStream($"upload/{file.Name}", FileMode.Create, FileAccess.Write))
+            await using (var fs = new FileStream($"wwwroot{image_path}", FileMode.Create, FileAccess.Write))
             {
                 await file.Data.CopyToAsync(fs);
             }
