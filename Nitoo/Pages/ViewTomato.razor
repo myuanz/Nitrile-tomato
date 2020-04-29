@@ -46,16 +46,19 @@ else
     private Tomato[] tomatos;
     private Tomato new_tomato;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        await refresh_futures();
+        refresh_futures();
     }
-    public async Task refresh_futures()
+    public void refresh_futures()
     {
         tomatos = tomato_service.GetTomatos();
-
         new_tomato = new Tomato();
-        new_tomato.person = await local_tore.GetItemAsync<string>("persion");
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        new_tomato.person = await local_tore.GetItemAsync<string>("person");
     }
     public void view_detail(Tomato item)
     {

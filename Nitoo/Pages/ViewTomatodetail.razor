@@ -7,7 +7,7 @@
 @using MongoDB.Bson;
 
 @inject TomatoService tomato_service
-@inject Blazored.LocalStorage.ILocalStorageService local_tore
+@inject Blazored.LocalStorage.ILocalStorageService local_store
 @inject NavigationManager Nav
 @inject IJSRuntime JSRuntime
 
@@ -50,26 +50,30 @@
     private Tomato tomato;
     [Parameter]
     public string _id { get; set; }
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        await refresh_futures(true);
+
+        refresh_futures(true);
     }
 
-    public async Task refresh_futures(bool firstRender = false)
+    public void refresh_futures(bool firstRender = false)
     {
 
-        _id = _id ?? ObjectId.GenerateNewId().ToString();
+        _id ??= ObjectId.GenerateNewId().ToString();
         tomato = tomato_service.FindTomato(ObjectId.Parse(_id)) ?? new Tomato();
         tomato._id = ObjectId.Parse(_id);
         tomato.comments = new List<Comment>();
 
-        tomato.person = tomato.person ?? await local_tore.GetItemAsync<string>("person");
-
     }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        tomato.person ??= await local_store.GetItemAsync<string>("person");
+    }
+
     public async Task add_new_tomato()
     {
         await tomato_service.AddTomato(tomato);
-        await local_tore.SetItemAsync("person", tomato.person);
+        await local_store.SetItemAsync("person", tomato.person);
         Nav.NavigateTo("ViewTomato");
     }
 
